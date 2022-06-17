@@ -1,0 +1,8 @@
+name: Api
+version: '${version}'
+main: io.github.donghune.template.Api
+api-version: 1.18
+prefix: [ Api ]
+authors: [ donghune ]
+description: template project
+website: https://github.com/donghune
