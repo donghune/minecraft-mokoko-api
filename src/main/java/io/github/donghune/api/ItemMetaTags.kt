@@ -1,22 +1,25 @@
 package io.github.donghune.api
 
 import com.google.gson.Gson
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataType
+import kotlin.reflect.KClass
+import kotlin.reflect.jvm.jvmName
+
+@Serializable
+data class DummyData(
+    val data: String
+)
 
 val ItemMeta.tags: ItemMetaTags
     get() = ItemMetaTags(persistentDataContainer)
-
-inline fun <reified T> ItemStack.setTag(value: T) {
-    itemMeta.tags.set(T::class.simpleName ?: throw(Exception("SimpleName is null")), value)
-}
-
-inline fun <reified T> ItemStack.getTag(): T? {
-    return T::class.simpleName?.let { itemMeta.tags.getObject<T>(it) }
-}
 
 class ItemMetaTags(private val persistentDataContainer: PersistentDataContainer) {
     fun <T> set(tag: String, value: T) {
@@ -84,10 +87,5 @@ class ItemMetaTags(private val persistentDataContainer: PersistentDataContainer)
     fun getLongArray(tag: String): LongArray? {
         val key = NamespacedKey(plugin, tag)
         return persistentDataContainer.get(key, PersistentDataType.LONG_ARRAY)
-    }
-
-    inline fun <reified T> getObject(tag: String): T? {
-        val key = NamespacedKey(plugin, tag)
-        return Gson().fromJson(getString(tag), T::class.java)
     }
 }

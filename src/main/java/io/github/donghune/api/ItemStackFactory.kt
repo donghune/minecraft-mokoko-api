@@ -1,6 +1,7 @@
 package io.github.donghune.api
 
 import io.github.donghune.api.extensions.chatColor
+import io.github.donghune.api.extensions.translateColor
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.TranslatableComponent
@@ -10,7 +11,6 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.*
-import io.github.donghune.api.extensions.translateColor
 
 fun ItemStack.edit(isWithClone: Boolean = false, block: ItemStackFactory.() -> ItemStackFactory): ItemStack {
     return block.invoke(ItemStackFactory(this, isWithClone)).build()
@@ -23,7 +23,8 @@ val ItemStack.displayNameOrLocaleMaterial: Component
     get() {
         return if (itemMeta.hasDisplayName()) {
             (((displayName() as TranslatableComponent).args()[0] as TextComponent).children()[0] as TextComponent)
-        } else {
+        }
+        else {
             Component.text("&f".translateColor()).children(listOf(Component.translatable(type.translationKey())))
         }
     }
@@ -32,7 +33,8 @@ val ItemStack.displayNameOrMaterial: String
     get() {
         return if (itemMeta.hasDisplayName()) {
             (((displayName() as TranslatableComponent).args()[0] as TextComponent).children()[0] as TextComponent).content()
-        } else {
+        }
+        else {
             type.toString()
         }
     }
@@ -212,53 +214,9 @@ class ItemStackFactory(
         return this
     }
 
-    fun <T> setTag(tag: String, value: T): ItemStackFactory {
-        changedItemMeta.tags.set(tag, value)
+    fun <T> setTag(tag: String, data: T): ItemStackFactory {
+        changedItemMeta.tags.set(tag, data)
         return this
-    }
-
-    fun getByte(tag: String): Byte? {
-        return changedItemMeta.tags.getByte(tag)
-    }
-
-    fun getShort(tag: String): Short? {
-        return changedItemMeta.tags.getShort(tag)
-    }
-
-    fun getInt(tag: String): Int? {
-        return changedItemMeta.tags.getInt(tag)
-    }
-
-    fun getLong(tag: String): Long? {
-        return changedItemMeta.tags.getLong(tag)
-    }
-
-    fun getFloat(tag: String): Float? {
-        return changedItemMeta.tags.getFloat(tag)
-    }
-
-    fun getDouble(tag: String): Double? {
-        return changedItemMeta.tags.getDouble(tag)
-    }
-
-    fun getString(tag: String): String? {
-        return changedItemMeta.tags.getString(tag)
-    }
-
-    fun getByteArray(tag: String): ByteArray? {
-        return changedItemMeta.tags.getByteArray(tag)
-    }
-
-    fun getIntArray(tag: String): IntArray? {
-        return changedItemMeta.tags.getIntArray(tag)
-    }
-
-    fun getLongArray(tag: String): LongArray? {
-        return changedItemMeta.tags.getLongArray(tag)
-    }
-
-    inline fun <reified T> getObject(tag: String): T? {
-        return changedItemMeta.tags.getObject(tag) as T?
     }
 
     fun build(): ItemStack {
@@ -269,4 +227,47 @@ class ItemStackFactory(
         return replace("&", "§")
     }
 
+}
+
+
+
+
+fun ItemStack.getByte(tag: String): Byte? {
+    return itemMeta.tags.getByte(tag)
+}
+
+fun ItemStack.getShort(tag: String): Short? {
+    return itemMeta.tags.getShort(tag)
+}
+
+fun ItemStack.getInt(tag: String): Int? {
+    return itemMeta.tags.getInt(tag)
+}
+
+fun ItemStack.getLong(tag: String): Long? {
+    return itemMeta.tags.getLong(tag)
+}
+
+fun ItemStack.getFloat(tag: String): Float? {
+    return itemMeta.tags.getFloat(tag)
+}
+
+fun ItemStack.getDouble(tag: String): Double? {
+    return itemMeta.tags.getDouble(tag)
+}
+
+fun ItemStack.getString(tag: String): String? {
+    return itemMeta.tags.getString(tag)
+}
+
+fun ItemStack.getByteArray(tag: String): ByteArray? {
+    return itemMeta.tags.getByteArray(tag)
+}
+
+fun ItemStack.getIntArray(tag: String): IntArray? {
+    return itemMeta.tags.getIntArray(tag)
+}
+
+fun ItemStack.getLongArray(tag: String): LongArray? {
+    return itemMeta.tags.getLongArray(tag)
 }
